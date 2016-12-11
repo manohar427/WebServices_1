@@ -1,0 +1,37 @@
+<!-- Use this file to deploy some handlers/chains and services      -->
+<!-- Two ways to do this:                                           -->
+<!--   java org.apache.axis.client.AdminClient deploy.wsdd          -->
+<!--      after the axis server is running                          -->
+<!-- or                                                             -->
+<!--   java org.apache.axis.utils.Admin client|server deploy.wsdd   -->
+<!--      from the same directory that the Axis engine runs         -->
+
+<deployment
+    xmlns="http://xml.apache.org/axis/wsdd/"
+    xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+
+  <!-- Services from CustomerServiceService WSDL service -->
+
+  <service name="CustomerService" provider="java:RPC" style="wrapped" use="literal">
+      <parameter name="wsdlTargetNamespace" value="http://test.com"/>
+      <parameter name="wsdlServiceElement" value="CustomerServiceService"/>
+      <parameter name="schemaQualified" value="http://test.com"/>
+      <parameter name="wsdlServicePort" value="CustomerService"/>
+      <parameter name="className" value="com.test.CustomerServiceSoapBindingImpl"/>
+      <parameter name="wsdlPortType" value="CustomerService"/>
+      <parameter name="typeMappingVersion" value="1.2"/>
+      <operation name="getCustomer" qname="operNS:getCustomer" xmlns:operNS="http://test.com" returnQName="retNS:getCustomerReturn" xmlns:retNS="http://test.com" returnType="rtns:Customer" xmlns:rtns="http://test.com" soapAction="" >
+        <parameter qname="pns:c" xmlns:pns="http://test.com" type="tns:Customer" xmlns:tns="http://test.com"/>
+      </operation>
+      <parameter name="allowedMethods" value="getCustomer"/>
+
+      <typeMapping
+        xmlns:ns="http://test.com"
+        qname="ns:Customer"
+        type="java:com.test.Customer"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle=""
+      />
+  </service>
+</deployment>
